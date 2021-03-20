@@ -14,4 +14,5 @@ function AppNavigator({}) {
   );
 }
 
+const git;
 export default AppNavigator;
