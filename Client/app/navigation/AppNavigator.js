@@ -1,6 +1,5 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import WellcomeScreen from "../screens/WellcomeScreen";
 import HomeScreen from "../screens/HomeScreen";
 
 function AppNavigator({}) {
@@ -8,11 +7,9 @@ function AppNavigator({}) {
 
   return (
     <StackNavigator.Navigator>
-      <StackNavigator.Screen name="wellcomeScreen" component={WellcomeScreen} />
       <StackNavigator.Screen name="chatScreen" component={HomeScreen} />
     </StackNavigator.Navigator>
   );
 }
 
-const git;
 export default AppNavigator;

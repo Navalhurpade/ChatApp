@@ -5,18 +5,18 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import defaultStyles from "./../config/styles";
 import Color from "../config/colors";
 
-function AppTextInput({ icon, placeholder, onSend, ...rest }) {
+function AppTextInput({ icon, placeholder, onSend, width, ...rest }) {
   return (
     <View style={{ flexDirection: "row", alignItems: "center" }}>
-      <View style={[styles.container]}>
+      <View style={[styles.container, { width: width }]}>
         <TextInput
           placeholder={placeholder}
           style={[defaultStyles.text, styles.textInput]}
           {...rest}
         />
       </View>
-      <View style={styles.iconContainer}>
-        {icon && (
+      {icon && (
+        <View style={styles.iconContainer}>
           <MaterialCommunityIcons
             color={defaultStyles.Color.white}
             style={styles.icon}
@@ -24,8 +24,8 @@ function AppTextInput({ icon, placeholder, onSend, ...rest }) {
             onPress={onSend}
             size={25}
           />
-        )}
-      </View>
+        </View>
+      )}
     </View>
   );
 }
@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
     backgroundColor: defaultStyles.Color.lightGray,
     borderRadius: 25,
     flexDirection: "row",
-    width: "80%",
   },
   iconContainer: {
     padding: 5,
@@ -48,15 +47,12 @@ const styles = StyleSheet.create({
     width: 50,
     justifyContent: "center",
     alignItems: "center",
-    // flex: 1,
   },
   textInput: {
     flex: 1,
   },
   icon: {
     justifyContent: "flex-end",
-
-    // paddingRight: 10,
   },
 });
 

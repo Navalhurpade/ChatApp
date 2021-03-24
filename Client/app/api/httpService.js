@@ -1,7 +1,8 @@
 import { io } from "socket.io-client";
 
 const ConnectionURI = "http://192.168.9.228:8080";
-export const socket = io(ConnectionURI);
+
+const socket = io(ConnectionURI);
 
 export const notifyUserJoined = async (user) => {
   socket.emit("new-user-connect", user);
@@ -29,7 +30,12 @@ export const waitForNewUser = async (callback) => {
 
 export const waitForUserLeave = async (callback) => {
   await socket.on("user-disconnect", (user) => {
-    // console.log("Notice user leave " + user);
     callback(user);
+  });
+};
+
+export const waitForLetestData = async (callback) => {
+  await socket.on("get-letest-data", (data) => {
+    callback(data);
   });
 };

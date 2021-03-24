@@ -1,23 +1,18 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text } from "react-native";
-import { notifyUserJoined } from "../api/httpService";
+import { View, StyleSheet } from "react-native";
 import AppButton from "../components/AppButton";
-import AppTextInput from "../components/AppTextInput";
 import Color from "../config/colors";
 
 function WellcomeScreen({ navigation }) {
-  const [user, setUser] = useState("");
-
   return (
     <View style={styles.container}>
-      <Text>Enter Your Name To join the chat !</Text>
-      <AppTextInput value={user} onChangeText={setUser} />
       <AppButton
-        title="Join Now !"
-        onPress={() => {
-          notifyUserJoined(user);
-          navigation.navigate("chatScreen", user);
-        }}
+        title="Login"
+        onPress={() => navigation.navigate("LoginScreen")}
+      />
+      <AppButton
+        title="Register"
+        onPress={() => navigation.navigate("RegisterScreen")}
       />
     </View>
   );
