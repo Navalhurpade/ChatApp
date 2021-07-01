@@ -1,54 +1,121 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Alert, StyleSheet } from "react-native";
+import { Alert, FlatList, ScrollView, StyleSheet, View } from "react-native";
 import { removeToken } from "../api/Authstorage";
 import http from "../api/http";
-import { waitForLetestData, notifyUserJoined } from "../api/httpService";
+import {
+  waitForLetestData,
+  notifyUserJoined,
+  fallbackToLogin,
+} from "../api/httpService";
 import AppButton from "../components/AppButton";
 import AuthContext from "../components/AuthContext";
 import FloatingAButton from "../components/FloatingAButton";
 import Screen from "../components/Screen";
 import Color from "../config/colors";
 import UserCard from "./../components/UserCard";
+import RequestDilogBox from "../components/RequestDilogBox";
 
-function HomeScreen({}) {
-  const [messages, setMasseges] = useState([]);
-  const context = useContext(AuthContext);
+function HomeScreen({ navigation }) {
+  const usersDetail = useContext(AuthContext);
+  const [data, setData] = useState({});
+  const [conversations, setConversation] = useState([]);
+  const [refreshing, setFreshing] = useState(false);
 
   useEffect(() => {
-    notifyUserJoined(context.user);
-    waitForLetestData((data) => {
-      console.log("Got letest data ", data);
-      context.setUser(data);
+    let isMounted = true;
+
+    waitForLetestData((recivedData) => {
+      console.log("Got letest data !", recivedData);
+      if (isMounted) {
+        setData(recivedData);
+        console.log("Data is", data);
+        recivedData.freinds.map((usr) => {
+          const convObj = {
+            freindId: usr.freind._id,
+            name: usr.freind.name,
+            chat: usr.conversation.conversations,
+            chatId: usr.conversation._id,
+          };
+          const add = [...conversations, convObj];
+          setConversation(add);
+        });
+      }
     });
+
+    fallbackToLogin(() => {
+      removeToken();
+      usersDetail.setUser(null);
+    });
+    return () => {
+      isMounted = false;
+    };
+  });
+
+  useEffect(() => {
+    notifyUserJoined(usersDetail.user._id);
   }, []);
 
   const handleAddFreinds = async (number) => {
     try {
-      console.log(context);
-      const responce = await http.put("/request", {
+      const {
+        data: { error, info },
+      } = await http.put("/request", {
         phoneNo: number,
-        myId: context.user._id,
+        myId: usersDetail.user._id,
       });
-      if (responce.data.error) {
-        Alert.alert(responce.data.error);
+      if (error) {
+        Alert.alert("Sorry !", error);
       }
-      Alert.alert(responce.data.info);
-    } catch (error) {
-      console.log("Error !", error);
+      Alert.alert("Ok !", info);
+    } catch (err) {
+      console.log("Error !", err);
     }
   };
 
+  const handleFreindReq = async (isAcepted, reqUserId) => {
+    try {
+      const data = {
+        myId: usersDetail.user._id,
+        requestedUsersId: reqUserId,
+        isAcepted: isAcepted,
+      };
+      const responce = await http.patch("/request/acepted", data);
+
+      if (responce.body.error) {
+        Alert.alert(responce.body.error);
+        console.log("Error", responce.body);
+      }
+    } catch (error) {}
+  };
+
+  const { freinds, freindRequests } = data;
+
   return (
     <Screen style={styles.container}>
-      {context.user.freinds.map((usr) => (
-        <UserCard key={usr} lastMessage="hey" name="naval" date="4/56/7678" />
-      ))}
+      <RequestDilogBox onPress={handleFreindReq} data={freindRequests} />
+      <View style={{ flex: 1 }}>
+        <FlatList
+          data={freinds}
+          keyExtractor={(usr) => usr.freind._id}
+          renderItem={(usr) => (
+            <UserCard
+              key={usr.freind._id}
+              lastMessage="hey"
+              name={usr.freind.name}
+              date="4/56/7678"
+              onPress={() => navigation.navigate("ChatScreen", usr)}
+            />
+          )}
+          refreshing={refreshing}
+          onRefresh={() => {}}
+        />
+      </View>
       <FloatingAButton onPress={handleAddFreinds} />
       <AppButton
         title="logout"
         onPress={async () => {
           await removeToken("x-auth-key");
-          context.setUser(null);
+          usersDetail.setUser(null);
         }}
       />
     </Screen>
@@ -69,6 +136,7 @@ const styles = StyleSheet.create({
   newUser: {
     color: Color.black,
   },
+  request: {},
 });
 
 export default HomeScreen;

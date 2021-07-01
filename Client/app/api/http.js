@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const CONNECTION_URL = "http://192.168.9.228:8080";
+const CONNECTION_URL = "http://192.168.23.228:8080";
 
 axios.defaults.baseURL = CONNECTION_URL;
 

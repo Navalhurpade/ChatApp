@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Modal, StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Color from "../config/colors";
 import AppTextInput from "./AppTextInput";
@@ -16,7 +16,12 @@ function FloatingAButton({ onPress }) {
       >
         <MaterialCommunityIcons color="white" name="plus" size={30} />
       </TouchableOpacity>
-      <Modal style={styles.modalContainer} transparent visible={isVisible}>
+      <Modal
+        animationType="slide"
+        style={styles.modalContainer}
+        transparent
+        visible={isVisible}
+      >
         <View style={styles.modal}>
           <AppTextInput
             value={number}
@@ -25,9 +30,15 @@ function FloatingAButton({ onPress }) {
           />
           <AppButton
             onPress={() => onPress(number)}
-            title="Add freind"
+            title="Send request"
             backgroundColor="cyan"
           />
+          <Text
+            style={{ color: Color.softBlue }}
+            onPress={() => setIsVisible(false)}
+          >
+            close
+          </Text>
         </View>
       </Modal>
     </>
@@ -51,6 +62,8 @@ const styles = StyleSheet.create({
     height: 200,
     width: "60%",
     alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: "70%",
     borderRadius: 10,
     elevation: 50,

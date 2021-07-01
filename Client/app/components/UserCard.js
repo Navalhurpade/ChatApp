@@ -1,16 +1,17 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Color from "../config/colors";
-import Screen from "./Screen";
 
 function UserCard({
   name = "Naval Hurpade",
   lastMessage = "Hey I'm using Wechat",
   date = "12/03/2021",
+  route,
+  onPress,
 }) {
   return (
-    <Screen>
+    <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.container}>
         <View style={styles.img}>
           <MaterialCommunityIcons color="blue" size={35} name="account" />
@@ -23,7 +24,7 @@ function UserCard({
           <Text>{date}</Text>
         </View>
       </View>
-    </Screen>
+    </TouchableWithoutFeedback>
   );
 }
 

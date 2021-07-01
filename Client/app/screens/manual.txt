@@ -1,0 +1,5 @@
+step 1 => When user connects to sever send All Letest data
+
+step 2 => when app loads extract all converstions and clone them in state at HomeScreen 
+
+step 3 => by using that state map it to all UserCard

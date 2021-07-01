@@ -3,7 +3,6 @@ import { View, StyleSheet, TextInput } from "react-native";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import defaultStyles from "./../config/styles";
-import Color from "../config/colors";
 
 function AppTextInput({ icon, placeholder, onSend, width, ...rest }) {
   return (

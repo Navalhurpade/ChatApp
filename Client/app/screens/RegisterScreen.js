@@ -8,7 +8,6 @@ import http from "../api/http";
 
 const validationSchema = yup.object().shape({
   name: yup.string().required(),
-  email: yup.string().email().required(),
   phoneNo: yup
     .string()
     .required()
@@ -46,7 +45,6 @@ function RegisterScreen({}) {
       <Form
         initialValues={{
           name: "",
-          email: "",
           phoneNo: "",
           password: "",
           ConfirmPassword: "",
@@ -55,12 +53,6 @@ function RegisterScreen({}) {
         onSubmit={handleRegistration}
       >
         <FormFeed placeholder="Name" name="name" width="70%" />
-        <FormFeed
-          name="email"
-          placeholder="Email"
-          keyboardType="email-address"
-          width="85%"
-        />
         <FormFeed
           name="phoneNo"
           placeholder="Phone"

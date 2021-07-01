@@ -2,23 +2,31 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
   name: String,
-  email: String,
   phoneNo: String,
   password: String,
   freinds: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "User", unique: true },
+    {
+      freind: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+      conversation: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Conversation",
+      },
+    },
   ],
   registeredAt: {
     type: Date,
     default: Date.now,
   },
   freindRequests: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "User", unique: true },
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: [],
+    },
   ],
-  messages: {
-    type: Array,
-    default: [],
-  },
 });
 
 const User = mongoose.model("User", userSchema);

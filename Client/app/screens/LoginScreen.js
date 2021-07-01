@@ -10,7 +10,7 @@ import AuthContext from "../components/AuthContext";
 import jwtDecode from "jwt-decode";
 
 const validationSchema = yup.object().shape({
-  username: yup.string().required(),
+  phoneNo: yup.string().required(),
   password: yup.string().required(),
 });
 
@@ -18,10 +18,9 @@ function LoginScreen({}) {
   const context = useContext(AuthContext);
 
   const handleLogin = async (UserDetails) => {
-    console.log("Im geting fired !");
     try {
       const { data } = await http.post("/auth", {
-        email: UserDetails.username,
+        phoneNo: UserDetails.phoneNo,
         password: UserDetails.password,
       });
       if (data.error) {
@@ -45,11 +44,11 @@ function LoginScreen({}) {
     <Screen style={styles.container}>
       <Text style={styles.heading}>Login to WeChat</Text>
       <Form
-        initialValues={{ username: "", password: "" }}
+        initialValues={{ phoneNo: "", password: "" }}
         validationSchema={validationSchema}
         onSubmit={handleLogin}
       >
-        <FormFeed name="username" placeholder="Email or Phone" />
+        <FormFeed name="phoneNo" placeholder="Phone" />
         <FormFeed name="password" placeholder="password" secureTextEntry />
         <SubmitButon title="Login" />
       </Form>
